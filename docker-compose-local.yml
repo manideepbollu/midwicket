@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+    midwicket:
+        container_name: ${PROJECT}.midwicket
+        image: manideepbollu/${PROJECT}-midwicket:dev-${TAG}
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        restart: ${SERVICES_RESTART_TYPE}
+        env_file:
+            - .env
+        command: npm run watch
+        ports:
+            - 8030:3000
+        volumes:
+            - .:/code
+            - /code/node_modules
+

@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+    midwicket:
+        container_name: ${PROJECT_STACK}.midwicket
+        image: manideepbollu/${PROJECT}-midwicket:dev-${TAG}
+        build:
+            context: .
+            dockerfile: ./Dockerfile               
+        env_file:
+            - .env
+        networks:
+            - project_dev
+        volumes:
+            - .:/code
+            - /code/node_modules
+        command: npm run watch
+        labels:
+            - "traefik.enable=true"
+            - "traefik.backend=midwicket"
+            - "traefik.port=3000"
+            - "traefik.frontend.rule=HostRegexp:{subdomain:midwicket.+}"
+
+networks:
+    project_dev:
+        external:
+            name: project_dev
+
