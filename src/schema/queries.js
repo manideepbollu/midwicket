@@ -3,12 +3,14 @@
 const { GraphQLObjectType } = require('graphql');
 const baconQueries = require('../model/bacon/queries');
 const fixtureQueries = require('../model/fixture/queries');
+const groupQueries = require('../model/group/queries');
 
 module.exports = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
     bacon: baconQueries.bacon,
     bacons: baconQueries.bacons,
-    fixtures: fixtureQueries.fixtures,
+    FIXTURES: fixtureQueries.FIXTURES,
+    USER_GROUPS: groupQueries.USER_GROUPS,
   },
 });

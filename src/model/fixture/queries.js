@@ -9,7 +9,7 @@ const Fixture = require('./fixture');
 
 // Defines the queries
 module.exports = {
-  fixtures: {
+  FIXTURES: {
     type: new GraphQLList(type),
     args: {
       TYPE: {
