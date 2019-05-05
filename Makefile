@@ -30,7 +30,7 @@ build-app:
 
 ## START environment
 start:
-		docker-compose -f ${DEV_COMPOSE_FILE} up -d
+		docker-compose -f ${DEV_COMPOSE_FILE} up
 
 ## STOP environment
 stop:
@@ -43,7 +43,7 @@ destroy:
 ## REBUILD environment
 rebuild: rebuild-app npm-install
 rebuild-app:
-		docker-compose -f ${DEV_COMPOSE_FILE} up -d --build
+		docker-compose -f ${DEV_COMPOSE_FILE} up --build
 
 ## Log in NODE
 login-node:
