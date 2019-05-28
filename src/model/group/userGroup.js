@@ -3,6 +3,7 @@
 const DAO = require('../../lib/dao');
 const mySQLWrapper = require('../../lib/mysqlWrapper');
 const util = require('../../util/util');
+const { isEmpty } = require('lodash');
 
 class UserGroup extends DAO {
 
@@ -23,8 +24,50 @@ class UserGroup extends DAO {
     if (Object.keys(fields).length === 0) return this.findAll();
 
     // Find matching userGroups
-    return this.findByFields({
-      fields,
+    // return this.findByFields({
+    //   GROUP_NAME,
+    // });
+
+    return new Promise(async (resolve, reject) => {
+      let groups = await this.findByFields({ fields });
+      let userListPromises;
+
+      if (groups && !isEmpty(groups)) {
+        userListPromises = groups.map((group) => new Promise(async (resolveUsers, rejectUsers) => {
+          try {
+            const { GROUP_NAME, GROUP_CODE } = group;
+            let users = [];
+
+            const groupRecords = await this.findByFields({
+              fields: { GROUP_NAME, GROUP_CODE },
+            });
+
+            if (groupRecords && !isEmpty(groupRecords)) {
+              groupRecords.forEach(({ USER_ID }) => {
+                users.push(USER_ID);
+              });
+            }
+
+            group.USERS = users;
+            
+            resolveUsers();
+          } catch (err) {
+            rejectUsers(err);
+          }
+        })
+        );
+
+        Promise.all(userListPromises)
+          .then(() => {
+            resolve(groups);
+          })
+          .catch((err) => {
+            resolve(groups);
+          });
+      } else {
+        resolve(groups);
+      }
+
     });
   }
 
@@ -41,7 +84,7 @@ class UserGroup extends DAO {
           GROUP_NAME,
           GROUP_CODE,
           USER_ID,
-          CREATE_TIME: util.getDateTime()
+          CREATE_TIME: util.getDateTime(),
         },
       });
 

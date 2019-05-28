@@ -20,6 +20,9 @@ module.exports = new GraphQLObjectType({
     USER_ID: {
       type: new GraphQLNonNull(GraphQLID),
     },
+    USERS: {
+      type: new GraphQLNonNull(GraphQLID),
+    },
     CREATE_TIME: {
       type: new GraphQLNonNull(GraphQLString),
     },
